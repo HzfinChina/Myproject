@@ -1,0 +1,122 @@
+\documentclass[utf8]{ctexart}
+\usepackage{geometry}
+\geometry{a4paper,left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm}
+% Math Support 
+\usepackage{amsmath,amsfonts,amssymb,amsthm} %数学符号
+% Codingstyle 
+\usepackage{listings}
+\lstset{
+language = C,
+numbers = left,
+frame = shadowbox
+}
+
+\author{胡志烽}
+\linespread{1.5}
+\title{第一章作业}
+\begin{document}
+\maketitle
+
+\section*{1.5}
+\begin{enumerate}
+\item 证明$\log X <X$ 对所有$X>0$成立
+\begin{proof}
+\[
+X - \log X > X- \log(X+1)>X-\ln(X+1)
+\]
+\end{proof}
+\item 证明$\log (A^B) = B\log A$
+\begin{proof}
+\[
+suppose\ \begin{cases}
+x = \log (A^B)\\ y = B\log A
+\end{cases}
+\ then\ \begin{cases}
+2^x = A^B\\ 2^{y/B} = A
+\end{cases}
+\therefore 2^y = A^B 
+\]
+\end{proof}
+\end{enumerate}
+
+\section*{1.6}
+\begin{enumerate}
+\item $\displaystyle\sum_{i=0}^{\infty} \frac{1}{4^i}$ 
+\begin{proof}[解]
+等比数列求和
+\[ 
+Sum = a_0 \times \frac{1-q^n}{1-q} = 1 \times \lim_{n \to \infty}\frac{1-(\frac 14)^n}{\frac 34} = \frac 43
+\]
+\end{proof}
+\item $\displaystyle \sum_{i =0 }^{\infty} \frac i{4^i}$
+\begin{proof}[解]
+\begin{align*}
+suppose\ S &= \sum_{i = 0}^{N}  \frac i {4^i} \\ 
+then\ \frac 14 S  &= \sum_{i = 0}^{N} \frac{i}{4^{(i+1)}}\\
+\therefore\ \frac 34 S  &=  (\frac 14 + \frac 2{4^2} + \frac 3{4^3} + \cdots + \frac N {4^N}) - (\frac 1 {4^2} + \frac 2{4^3} +\cdots + \frac N{4^{N+1}})\\
+& = \frac 14 +\frac 1 {4^2} +\cdots \frac 1{4^N} - \frac N{4^{N+1}}\\
+& = \frac 14\times  \frac{1-(\frac 14)^N}{1-\frac 14} - \frac{N}{4^{N+1}}\\ 
+S& =  \frac 49\left[1-(\frac 14)^N\right] - \frac{N}{4^{N+1}}\\
+\therefore \lim_{N \to \infty} S &= \frac 49
+\end{align*}
+\end{proof}
+\item $\displaystyle \sum_{i=0}^{\infty} \frac{i^2}{4^i}$
+\begin{proof}[解]
+\begin{align*}
+S &= \frac 14 + \frac{2^2}{4^2} + \frac{3^2}{4^3} +\cdots\\
+4S &= 1+ \frac 44 + \frac {3^2} {4^2} +\cdots \\
+\therefore 3S & = 1 + \frac 34 + \frac 5{4^2} +\cdots + \frac{2n+1}{4^n} + \cdots\\
+& =  2 \sum_{i=0}^{\infty} \frac i {4^i} + \sum_{i = 0}^{\infty} \frac 1{4^i}\\
+\therefore S & = 2\times \frac 49 + \frac 43 = \frac {20}9
+\end{align*} 
+\end{proof}
+\item $\displaystyle \sum_{i=0}^{\infty} \frac{i^N}{4^i}$:略
+\end{enumerate}
+\section*{1.7}
+估计
+\[\sum_{i=\lfloor N/2\rfloor}^{N}\frac 1i\]
+\begin{proof}[解]
+\begin{align*}
+\text{由调和和}H_N = \sum_{i=1}^{N} \frac 1i \approx \log _e N\\ 
+\sum_{i=\lfloor N/2\rfloor}^{N}\frac 1i = \sum_{i=1}^{N} \frac 1i - \sum_{i=1}^{\lfloor N/2\rfloor -1} \frac 1i\approx \ln N - \ln \frac N 2 = \ln 2
+\end{align*}
+\end{proof}
+\section*{1.8}
+\[2^{100}(\mod 5)\]
+
+\begin{proof}[解]
+\begin{align*}
+2^n \mod 5 & = k\\
+2^{n+1}\mod 5 & = 2k\mod 5\\
+let k &= 1\\
+&\downarrow\\
+2^n\mod 5 =1, 2^{n+1}\mod = 2&,2^{n+2}\mod = 4,2^{n+3}\mod=3,2^{n+4}\mod =1\\
+\therefore 2^N\mod 5\ T &= 4\\
+\therefore 2^100 \mod 5 = 2^0\mod 5 =1
+\end{align*}
+\end{proof}
+\section*{1.9}
+let $F_i = $ Fibonacci sequence($F_0  = F$),Proof:
+\begin{enumerate}
+\item $\displaystyle \sum_{i=1}^{N-2} F_i = F_N -2$
+\begin{proof}
+\begin{align*}
+    \text{Obviously when }N-2&=1 &\sum_{i=1}^{1}  = F_3 -2 \\
+\text{suppose that when }N-2 &= k &\sum_{i= 1}^{k} F_i = F_{k+2}-2\\
+\text{when }N-2 & = k+1 &\sum_{i=1}^{k+1} F_i = \sum_{i=1}^{k} F_i + F_{k+1} = F_{k+2} -2  + F_{k+1} = F_{k+3} -2\\
+\end{align*}
+\end{proof}
+\item $F_N < \phi ^N,\phi  = (1+\sqrt 5 )/2$
+    \begin{proof}
+    \begin{align*}
+    \phi ^2 = \frac 32 + \frac{\sqrt 5 }{2} = \phi  + 1 \\ 
+    \therefore \phi^{-2}+\phi^{-1}  = 1\\
+    \text{when } N = 1,2, F_N < \phi ^N \text{成立} \\
+    \text{suppose that when }N= k, F_k <\phi ^N\\
+    \text{when }N = k+1, F_{k+1} = F_k + F_{k-1} < \phi ^k + \phi ^{k-1}  = \phi^{k+1} (\phi^{-1} + \phi^{-2}) = \phi^{k+1} 
+    \end{align*}
+    \end{proof}
+\end{enumerate}
+
+\end{document}
+

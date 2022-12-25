@@ -1,0 +1,340 @@
+\documentclass[utf8]{ctexbook}
+\xeCJKsetup{CJKmath=true}
+\usepackage{geometry}
+\geometry{a4paper,left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm}
+% Math Support 
+\usepackage{amsmath,amsfonts,amssymb,amsthm} %数学符号
+\newtheorem{Theorem}{\large\textbf Th}[chapter]
+\newtheorem{Definition}{\large\textbf Def}[chapter]
+
+% Codingstyle 
+\usepackage{listings}
+\lstset{
+    language = C,
+    numbers = left,
+    frame = shadowbox
+}
+
+\author{胡志烽}
+\linespread{1.5}
+\title{C语言数据结构}
+
+
+
+\begin{document}
+\maketitle
+\chapter{引论}
+\section{数学知识回顾}
+\subsection{级数}
+\paragraph{等比数列求和}
+\begin{gather*}
+    \sum_{i=0}^{N } 2^i = 2^{N+1} -1
+    \\ \sum_{i=0}^{N } A^i = \frac{A^{N+1}-1}{A-1}
+\end{gather*}
+第二个公式如果$0<A<1$，那么当$N$趋近于$\infty$时，该和趋近于$1/(1-A)$
+\paragraph{变形的等比数列求和}
+\begin{gather*}
+\sum_{i=1 }^{\infty } \frac{i }{2^i } = 2
+\end{gather*}
+证明：高中的错项相减法
+\paragraph{算术级数}
+\begin{gather*}
+\sum_{i=1 }^{N } i = \frac{N(N+1)}{2}\approx \frac{N^2}{2}
+\end{gather*}
+\paragraph{特殊级数}
+\begin{gather*}
+    \sum_{i=1 }^{N}  i^2 = \frac{N(N+1)(2N+1)}{6}\approx \frac{N^3}3
+    \\ \sum_{i=1 }^{N}  i ^k \approx \frac{N^{k+1 }}{k+1};\ k\ne -1
+\end{gather*}
+\paragraph{调和数，调和和}
+\begin{gather*}
+H_N = \sum_{i=1 }^{N } \frac 1i \approx \log _e N
+\end{gather*}
+\subsection{模运算}
+$如果N整除A-B, 那么我们说A与B模N同余$(congruent),记为$A\equiv B(\mod N)$
+
+证明： 
+\begin{align*}
+    &(A-B)\%N   = 0 \Rightarrow (A-B) = k\times N \ (k\in \mathbb{Z})
+ \\ &suppose\ B = c\times N + r 
+ \\ & then\ A = (k+c)\times N +r
+\end{align*}
+\subsection{证明方法}
+\paragraph{归纳法} 
+证明过程分为两步。第一步是证明\textbf{基准情形}(base case)，接着，
+进行\textbf{归纳假设}(inductive hypothesis)
+\paragraph{通过反例证明}
+
+通常是证明假说不成立
+\paragraph{反证法证明}
+先假设定理不成立，然后证明该假设导致某个已知的性质不成立，从而说明原假说是错误的。
+
+例子:证明存在无穷多个素数
+
+证明：利用反证法，假设存在某个最大的素数$P_k$
+\[N = P_1P_2P_3\cdots P_k + 1\]
+
+显然$N>P_k$，由于每一个整数要么是素数, 要么是素数的乘积，根据假设N不是素数，所以N肯定是素数的乘积,可是$P_1,P_2,\cdots,P_k$都不能整除$N$，所以定理成立
+\section{递归简论}
+\paragraph{递归的两个基本法则}
+\begin{enumerate}
+    \item \textbf{基准情形}(base case)。必须有某些基准的情形， 不用递归就能求解
+    \item \textbf{不断推进}(making progress)。对于那些需要递归求解的情形，递归调用必须能够朝着产生基准情形的方向推进。
+\end{enumerate}
+
+\paragraph{例子：打印输出数}
+有一个正整数N希望打印，例程名字叫\verb|PrintOut(N)|。如果当前的I/O程序只支持处理打印\textbf{单个数字},命名这个例程为\verb|PrintDigit(N)|，那么这个问题可以用递归简洁地求解
+
+比如为了打印"76234"，只需要先打印"7623"，然后再打印"4"，第二步可以用\verb|PrintDigit(76234%10)|解决。现在让我们来确定基准情形和不断推进
+
+如果$0\le N < 10$，那么基准情形就是\verb|PrintDigit(N)|，现在，\verb|PrintOut(N)|已经对每一个0\~{}9的正整数作出了定义，而更大的正整数通过较小的正整数定义，整个过程见下
+
+\begin{lstlisting}
+void PrintOut( unsigned int N) 
+{
+    if (N >= 10)
+        PrintOut( N / 10 );
+    PrintDigit(N % 10);
+}
+\end{lstlisting}
+\subsection{递归和归纳}
+下面，用归纳法证明上面的数字递归程序是正确的
+
+\begin{Theorem}
+    对于$N\ge 0$，数字递归打印算法是正确的
+\end{Theorem}
+{\heiti 证明：}略
+
+\paragraph{递归的设计法则(design rule)}
+\begin{enumerate}
+    \item {\kaishu 基准情形}。必须有某些基准的情形，无须递归就能求解
+    \item {\kaishu 不断推进}。对于需要递归求解的情形，递归调用必须朝着能够产生基准情形的方向推进
+    \item {\kaishu 设计法则}。假设所有的递归调用都能运行。
+    \item {\kaishu 合成效益法则}(compound interest rule)切记不要在不同的递归调用中做重复性的工作
+\end{enumerate}
+
+\chapter{算法分析}
+\section{数学基础}
+\begin{Definition}
+    如果存在正常数$c,n_0$使得当$N\ge n_0时T(N) \le c(f(N))$，则记为$T(N) = O(f(N))$
+\end{Definition}
+\begin{Definition}
+如果存在正常数 $c, n_0$ 使得当 $N\ge n_0$时$T(N) \ge cf(N)$ ，则记为 $T(N) = \Omega(f(N))$
+\end{Definition}
+\begin{Definition}
+当且仅当$T(N) = O(f(N))$且$T(N) = \Omega (f(N))$时，$T(N) = \Theta(f(N))$
+\end{Definition}
+\begin{Definition}
+$如果T(N) = O(f(N))且T(N) \ne \Theta (f(N))，则T(N) = o(f(N))$
+\end{Definition}
+
+这些定理的目的是为了在函数之间建立一种相对的级别：\heiti{相对增长率}(relative rate of growth)
+
+Ex: $N\ge 1000时1000 N < N^2，所以1000N = O(N^2)，n_0 = 1000, c_0 = 1$
+
+注意大O和小o的区别：大O可能相等，小o一定小于
+
+\begin{itemize}
+    \item 当我们说$T(N) = O(f(N))$时，$T(N)$以不快于$f(N)$的速度增长，$f(N)$是$T(N)$的\kaishu{上界}(upper bound)
+    \item $f(N) = \Omega (T(N))$意味着$T(N)$是$f(N)$的\kaishu{下界}(low bound)
+\end{itemize}
+
+
+\paragraph{重要结论：}
+\begin{enumerate}
+    \item $If\ T_1(N) = O(f(N))\ and\ T_2 (N) = O(g(N))$, then 
+        \begin{enumerate}
+            \item $T_1(N) + T_2(N) = \max (O(f(N)), O(g(N)))$.
+            \item $T_1(N)\times T_2(N) = O(f(N)\times g(N))$.
+        \end{enumerate}
+    \item 如果$T(N)$是一个$k$次多项式，则$T(N) = \Omega (N^k)$.
+    \item 对任意常数$k,\log ^kN = O(N)$. 这告诉我们对数增长得非常缓慢
+\end{enumerate}
+
+\begin{table}[h]
+\centering 
+\begin{tabular}{l|l}
+    函数 & 名称\\\hline
+    $c$ & 常数\\
+    $\log N$ & 对数级\\ 
+    $\log ^2 N$ & 对数平方级\\
+    $N$ & 线性级\\
+    $N\log N$& \\
+    $N^2$& 平方级\\ 
+    $2^N$ & 指数级
+\end{tabular}
+\caption{典型的增长率}
+\end{table}
+\paragraph{计算相对增长率的方法——L'Hopital's rule}
+通过计算极限$\displaystyle{\lim_{ n \to \infty}f(N)/g(N)}$来确定两个函数的相对增长率，必要时可以使用洛必达法则求解。这个极限可能有四种情况
+\begin{itemize}
+    \item 极限$=0$：$f(N) = o(g(N))$
+    \item 极限$=c\ne0$：$f(N) = \Omega (g(N))$
+    \item 极限$ = \infty$：$g(N) = o(f(N))$
+    \item 极限摆动：二者无关
+\end{itemize}
+
+\section{模型}
+为了在正式的框架中分析算法，我们需要一个计算模型。我们的模型是一台标准的计算机，在机器中顺序地执行指令。该模型有一个标准的简单指令系统，如加法、乘法、赋值等。不同于实际计算机情况的是，模型机做任意一件简单的工作都恰好花费一个时间单元，我们还假设模型机有无限的内存。
+\section{运行时间计算}
+为了简化分析，我们做以下约定：抛弃低阶项，从而要做的就是计算大O的运行时间。
+\subsection{一个简单的例子}
+计算$\displaystyle \sum_{i = 1}^{N} i^3 的一个简单程序片段$
+\newline
+
+\begin{lstlisting}
+    int Sum( int N){
+        int i, PartialSum;
+
+/* 1 */  PartialSum = 0
+/* 2 */  for (i = 1; i <= N; i++){
+/* 3 */      PartialSum += i*i*i;
+/* 4 */  return PartialSum;
+        }
+\end{lstlisting}
+
+\paragraph{分析：}声明不计时间，第1行和第4行各占1个时间单元；
+
+第3行每次执行占用4个时间单元(两次乘法，一次加法和一次赋值)，执行N次一共占用4N个时间单元。
+
+第2行在初始化$i$、测试$i\le N$和对$i$的自增运算中隐含着开销，总开销是：初始化占1个时间单元，所有的测试占$N+1$个时间单元，所有的自增运算占$N$个时间单元，共$2N+2$个时间单元。
+
+所以我们得到总量：$6N+4$，因此，我们说该函数是$O(N)$的
+
+\subsection{一般法则}
+\begin{enumerate}
+    \item \verb|for|循环：
+
+       一次\verb|for|循环的运行时间至多是该\verb|for|循环内语句(包括测试)的运行时间乘以迭代的次数
+   \item 嵌套的\verb|for|循环：
+
+       从里往外分析这些循环。在一组嵌套循环内部的一条语句总的运行时间为该语句的运行时间乘以该组所有的\verb|for|循环大小的乘积
+   \item 顺序语句：
+       
+       将各个语句的运行时间求和即可(其中运行时间取高阶项)
+   \item \verb|if/else|语句：
+       一个\verb|if/else|语句的运行时间从不超过判断的时间加上两个条件中运行时间较长者的运行总时间
+\end{enumerate}
+\subsection{最大子序列和}
+\paragraph{特别注意：子序列表示下标连续的元素}
+\subsubsection{算法1}
+\begin{lstlisting}
+int MaxSubsequenceSum(const int A[], int N){
+    int ThisSum, MaxSum, i, j, k;
+
+/*1*/ MaxSum = 0;
+/*2*/ for (i = 0; i < N; i++){
+/*3*/     for (j = i; j < N; j++){
+/*4*/         ThisSum = 0;
+/*5*/         for (k = i; k <= j; k++){
+/*6*/             ThisSum += A[k];
+              }
+/*7*/         if (ThisSum > MaxSum)
+/*8*/             MaxSum = ThisSum;
+          }
+      }
+/*9*/ return MaxSum;
+}
+\end{lstlisting}
+
+\paragraph{理解算法：} 首先在数组[0, N-1]里面取[i, j]， 然后再再取[i, k] 这样循环往复,和最大值比较
+
+
+运行时间为$O(N^3)$，这完全取决于第5、6行，第六行由一个含于三重嵌套\verb|for|循环中的$O(1)$语句组成。第2行上的循环大小为N。
+
+第2个循环大小为$N-i$，第3个循环的大小为$j-i+1$，我们必须假设最坏的情况，假设这两个循环的大小都为$N$。因此总数为$O(1\cdot N\cdot N \cdot N + 2 \cdot N) = O(N^3)$,语句1总共的开销只是$O(1)$,而语句7、8的总共开销也只不过是$O(N^2)$,因为它们是两层循环内部的简单表达式。
+
+以上为粗略的分析。考虑到这些循环的实际大小，更精确的分析指出答案是$\Theta (N^3)$。 
+精确的分析由和$\displaystyle{\sum_{i=0}^{N-1} \sum_{j=i}^{N-1} \sum_{k = i}^{j} 1得到}$。首先，有
+\[
+    \sum_{k=i}^{j} 1 = j - i +1
+\]
+
+然后，我们得到
+\[
+    \sum_{j=i}^{N-1} (j-i+1) = 1 + 2  + \cdots (N-i) = \frac{(N-i+1)(N-i)}{2}
+\]
+
+接着，我们完成全部计算，有
+\begin{align*}
+&\sum_{i = 0}^{N-1} \frac{(N-i+1)(N-i)}{2} \\
+& = \sum_{i=1}^{N} \frac{(N-i+1)(N-i+2)}{2}\\ 
+& = \frac 12 \sum_{i=1}^{N} i^2 - (N+\frac 32)\sum_{i=1}^{N} i +\frac 12 (N^2 + 3N +2)\sum_{i=1}^{N} 1\\ 
+& = \frac 12 \frac{N(N+1)(2N+1)}{6} - (N+\frac 32)\frac{N(N+1)}{2}+ \frac{N^2 + 3N +2}{2}N\\ 
+&=\frac{N^3 + 3N^2 + 2N}{6}
+\end{align*}
+
+\subsubsection{算法2}
+\begin{lstlisting}
+int MaxSubSequenceSum (const int A[], int N){
+        int ThisSum, MaxSum, i, j;
+
+/*1*/   MaxSum = 0;
+/*2*/   for (i = 0; i < N; i++){
+/*3*/       ThisSum = 0;
+/*4*/       for (j = i; j < N; j++){
+/*5*/           ThisSum += A[j];
+
+/*6*/           if (ThisSum > MaxSum)
+/*7*/               MaxSum = ThisSum;
+            }
+        }
+/*8*/   return MaxSum;
+}
+\end{lstlisting}
+\paragraph{理解算法：} 在数组中取[i, N-1]的切片，然后从[i,N-1]中找到最大的序列和。
+
+\newpage
+\subsubsection{算法3}
+\begin{lstlisting}
+    static int MaxSubSum (const int A[], int Left, int Right){
+        int MaxLeftSum, MaxRightSum;
+        int MaxLeftBorderSum, MaxRightBorderSum;
+        int LeftBorderSum, RightBorderSum;
+        int Center, i;
+
+/*1 */   if (Left == Right) /* 基准情形 */ 
+/*2 */       if (A[Left] > 0)
+/*3 */           return A[Left];
+             else
+/*4 */           return 0;
+
+/*6 */   Center = (Left + Right) / 2;
+/*7 */   MaxLeftSum = MaxSubSum(A, Left, Center);
+/*8 */   MaxRightSum = MaxSubSum(A, Center+1, Right);
+
+/*9 */   MaxLeftBorderSum = 0; LeftBorderSum = 0;
+/*10*/   for (i=Center; i >= Left; i--){
+/*11*/       LeftBorderSum += A[i];
+/*12*/       if (LeftBorderSum > MaxLeftBorderSum)
+/*13*/           MaxLeftBorderSum = LeftBorderSum;
+         }
+
+        MaxRightBorderSum = 0; RightBorderSum = 0;
+        for (i = Center + 1; i <= Right; i++){
+            RightBorderSum += A[i];
+            if (RightBorderSum > MaxRightBorderSum)
+                MaxRightBorderSum = RightBorderSum;
+        }
+        return Max3(MaxLeftSum, MaxRightSum, MaxLeftBorderSum + MaxRightBorderSum);
+    }
+
+    int MaxSubsequenceSum(const int A[], int N) {
+        return MaxSubSum(A, 0, N-1);
+    }
+\end{lstlisting}
+\newpage 
+\paragraph{理解：分治算法}(divide-and-conquer)
+
+
+\begin{itemize}
+    \item “分” ：把问题分成大致相等的两个子问题，然后递归地对tam求解
+    \item “治” ： 将两个子问题的解合并到一起并可能再做些少量的附加工作，最后得到整个问题的解
+\end{itemize}
+
+最大子序列可能在三处出现。或者整个出现在输入数据的左半部，或者整个出现在输入数据的右半部，或者跨越输入部分的中部从而占据左右两半部分。
+
+前面两种情况可以递归求解。第三种情况可以先求出前半部分的最大和(必须要包括前半部分的最后一个元素)以及后半部分的最大和(必须包括后半部分的第一个元素)而得到。然后将这两个和加到一起。
+
+
+\end{document}
