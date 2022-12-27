@@ -336,5 +336,40 @@ int MaxSubSequenceSum (const int A[], int N){
 
 前面两种情况可以递归求解。第三种情况可以先求出前半部分的最大和(必须要包括前半部分的最后一个元素)以及后半部分的最大和(必须包括后半部分的第一个元素)而得到。然后将这两个和加到一起。
 
+\paragraph{时间分析：} 设$T(N)$是求解大小为$N$的最大子序列和问题所花费的时间。如果$N=1$，则算法3花费某个时间常量执行程序的第1-4行，我们称之为一个时间单元。于是，$T(1) = 1$。否则，程序必须运行两次递归调用，即在第9-17行之间的两个\verb|for|循环。这两个\verb|for|循环接触到$A_0$到$A_{N-1}$的每一个元素，从而在循环内部的工作量是常量。第1-5，8，13，18行上的工作量是常量，与$O(N)$相比可以忽略。
+
+现在我们重点来看6-7行，也就是递归调用的部分。这两行求解大小为$N/2$的子序列问题(假设$N$是偶数)。因此，这两行每行花费$T(N/2)$个时间单元，共花费$2T(N/2)$个时间单元。我们得到方程组：
+\begin{align*}
+    T(1) & =  1 
+    \\ T(N) &= 2T(N/2) + O(N)
+\end{align*}
+为了简化计算，可以用$N$代替上面方程中的$O(N)$。由于$T(N)$最终还是要用大O来表示，因此这么做并不影响答案。 
+
+\begin{align*}
+    T(1)& = 1\\
+    T(2)& = 4 = 2*2\\
+    T(4)&= 4 * 3 = 12 \\
+        &\vdots \\
+    if N= 2^k, T(N)&= N*(k+1) = N\log N + N = O(N\log N)
+\end{align*}
+
+\paragraph{算法4}
+\begin{lstlisting}
+    int MaxSubsequenceSum(const int A[], int N){
+        int ThisSum, MaxSum, j;
+
+        ThisSum = MaxSum = 0;
+        for (j = 0; j < N; j++){
+            ThisSum += A[j];
+            
+            if (ThisSum > MaxSum)
+                MaxSum = ThisSum;
+            else if (ThisSum < 0)
+                ThisSum = 0;
+        }
+        return MaxSum;
+    }
+\end{lstlisting}
+
 
 \end{document}
