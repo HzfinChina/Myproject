@@ -1,0 +1,65 @@
+\documentclass[utf8]{ctexart}
+\xeCJKsetup{CJKmath=true}
+\usepackage{geometry}
+\geometry{a4paper,left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm}
+% Math Support 
+\usepackage{amsmath,amsfonts,amssymb,amsthm} %数学符号
+% Codingstyle 
+\usepackage{listings}
+\lstset{
+language = C,
+numbers = left,
+frame = shadowbox
+}
+
+\author{胡志烽}
+\linespread{1.5}
+\title{第一章作业}
+\begin{document}
+\maketitle
+\section*{2.1}
+按增长率排列下列函数：
+\begin{enumerate}
+    \item $N$ \item $\sqrt N$ \item $N^{1.5}$ \item $N^2$ \item $N\log N$ \item $N \log N$ \item $N\log \log N$ \item $N \log ^2 N$ \item $N\log (N^2)$ \item $2/N$ 
+    \item $2^N$
+    \item $2^{N/2}$ 
+    \item $37$
+    \item $N^2 \log N$
+    \item $N^3$
+\end{enumerate}
+
+\begin{proof}[解]
+    \begin{gather*}
+        2^ N > 2^{N/2}>N^3 > N^2 \log N > N ^2 \\
+        我们来比较\sqrt N 和\log N  \\ 
+        \sqrt N > \log N\ 
+        所以N^{1.5}>N\log ^2 N>N\log (N^2) >N\log N >N\log \log N\\
+        综上，2^ N > 2^{N/2}>N^3 > N^2 \log N > N ^2 > N^{1.5} >N\log ^2 N>N\log (N^2) >N\log N >N\log \log N\\
+        >N>\sqrt N >37 >2/N
+    \end{gather*}
+\end{proof}
+
+\section*{2.2} 
+suppose $T_1 (N) = O(f(N)) ,T_2 (N) = O(f(N))$ which of below eqations hold
+\begin{enumerate}
+    \item $T_1(N) + T_2(N) = O(f(N))$
+        \begin{proof}
+            \begin{gather*}
+                \text{by definition } \exists c_1, n_1 > 0,when\ N > n_1, T_1(N) \le c_1f(N)
+                \\ \exists c_2, n_2 >0, when\ N > n_2, T_2 (N) \le c_2f(N)\\
+                let\ n_0 = \max (n_1, n_2), c_0 = \max (c_1, c_2),when\ N > n_0 , T_1(N) + T_2(N) \le c_0 f(N)
+            \end{gather*}
+        \end{proof}
+    \item $T_1(N) - T_2(N) = o(f(N))$
+        不成立。反例：$T_1(N ) = 2N, T_2(N) = N, f(N) = N$
+    \item $\dfrac{T_1(N)}{T_2(N)} = O(1)$ 
+        不成立。反例：$f(N) = N^2 , T_1 (N) = N^2, T_2(N) = N$
+    \item $T_1(N) = O(T_2 (N))$
+        不成立。见3
+\end{enumerate}
+
+\section*{2.3}
+哪个函数增长得更快？$N \log N, N^{1+ \varepsilon / \sqrt{\log N}}(\varepsilon > 0)$
+
+
+\end{document}
