@@ -77,7 +77,7 @@
     <g' d b g>4 <g, d b g> <fis d a fis> <fis' d a fis> 
     <g, d b g> <b' g d b> <cis, a e cis>8 <e cis a e> <a e cis a> <cis a e cis>
     <fis d fis,>1\arpeggio\> |\!
-    r2 \ottava 1<d' d,>2\arpeggio 
+    r2 \ottava 1<d' d,>2\arpeggio\fermata
     \bar "|."
   }
   \new Staff \relative c{\time 4/4 \key d \major \clef "bass"
@@ -101,6 +101,33 @@
     b( fis' b fis) fis,( cis' fis cis)
     g( d' g d) d,( a' d a)
     g( d' g d) a( e' a e)
+    d( a' d a) a,( e' a e) 
+    b( fis' a fis) fis,( cis' fis cis) 
+    g( d' g d) d,( a' d a)
+    g( d' g d) a( e' a cis)
+    d,16( a' d fis d a d, a') a,( e' a cis a e a, e')
+    b( fis' b d b fis b, fis') fis,( cis' fis a fis cis fis, cis')
+    g( d'g b g d g, d') d,( a' d fis d a d, a')
+    g( d' g b g d g, d') a(e' a cis a e a, e')
+    d( a' d fis d a d, a') a,( e' a cis a e a, e')
+    b( fis' b d b fis b, fis') fis,( cis' fis a fis cis fis, cis')
+    g( d' g b g d g, d') d,( a' d fis d a d, a')
+    g( d' g b g d g, d') a( e' a cis a e a, e')
+    d( a' d fis d a d, a') a,( e' a cis a e a, e')
+    b( fis' b d b fis b, fis') fis,( cis' fis a fis cis fis, cis')
+    g( d' g b g d g, d') d,( a' d fis d a d, a') 
+    g( d' g b g d g, d') a( e' a cis a e a, e')
+    d( a' d e d a d, a') a,( e' a cis a e a, e')
+    b( fis' b d b fis b, fis') a,( cis fis a fis cis fis, cis')
+    g( d' g b g d g, d') d,( a' d fis d a d, a')
+    g( d' g b g d g, d') a( e' a cis a e a, e')
+    d( a' d fis d a d, a') a,( e' a cis a e a, e')
+    b( fis' b d b fis b, fis') fis,( cis' fis a fis cis fis, cis')
+    g( d' g b g d g, d') d,( a' d fis d a d, a') 
+    g( d' g b g d g, d') a( e' a cis a e a, e)
+    d8( a' d fis \clef "treble" a d fis a
+    d8 fis a4) d,2\fermata
+
   }
   >>
 }
