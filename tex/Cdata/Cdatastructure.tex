@@ -354,6 +354,7 @@ int MaxSubSequenceSum (const int A[], int N){
 \end{align*}
 
 \paragraph{算法4}
+
 \begin{lstlisting}
     int MaxSubsequenceSum(const int A[], int N){
         int ThisSum, MaxSum, j;
@@ -370,6 +371,46 @@ int MaxSubSequenceSum (const int A[], int N){
         return MaxSum;
     }
 \end{lstlisting}
+\subsubsection{运行时间中的对数}
+    除分治算法外，可将对数最常出现的规律概括为下列一般法则：\kaishu{如果一个算法用常数时间($O(1)$)将问题的大小削减为其一部分(通常是1/2)，那么该算法就是$O(\log N)$的。另一方面，如果使用常数时间只是把问题减少一个常数(如将问题减少1)，那么这种算法就是$O(N)$的。}
 
+    \heiti 下面提供具有对数特点的三个例子
+\paragraph{对分查找}
+\paragraph{欧几里得算法} 计算两个数的最大公因数。
+
+\begin{lstlisting}
+    /* suppose M > N */
+    unsigned int Gcd(unsigned int M, unsigned int N){ 
+        unsigned int Rem;
+        while (N > 0){
+            Rem = M % N;
+            M = N; 
+            N = Rem;
+        }
+    return M;
+    }
+\end{lstlisting}
+
+虽然看不出余数的值按照常数因子递减的必然性，然而，我们可以证明，在两次迭代后，余数最多是原始值的一半。这就证明了迭代次数至多是$2\log N = O(\log N)$，从而得到运行时间。
+
+\begin{Theorem}
+    if $M>N$,then $M\mod N < M/2$
+\end{Theorem}
+
+\paragraph{幂运算}。我们用乘法的次数作为运行时间的度量
+\begin{lstlisting}
+    long int Pow (long int X, unsigned int N){
+        if (N == 0)
+            return 1;
+        if (N == 1)
+            return X;
+        if (IsEven(N))
+            return Pow(X * X, N / 2);
+        else 
+            return Pow(X * X, N / 2) * X;
+    }
+\end{lstlisting}
+
+\subsubsection{检验你的分析}
 
 \end{document}
