@@ -6,10 +6,9 @@
 
 {
   \new PianoStaff <<
-
     \new Staff \relative{\tempo 4=65 \time 4/4 \key d \major 
     fis''2\pp e
-    d cis
+    d cis_\markup \italic \bold "rit."
     b a
     b cis
     <fis d> <e cis> \break
@@ -69,32 +68,33 @@
     d'\< d, g b d b g d d' d, fis a fis' fis, a d\!
     g\> g, b d b' b, d g\!  a\< a, cis e b' b, cis' cis,\! \break 
     d'\f d, fis a d a fis d d' d, e a cis cis, e a 
-    cis cis, d fis b b, d fis b b, cis fis a a, cis fis \break
+    cis\dim ~ cis, d fis b b, d fis b b, cis fis a a, cis fis\! \break
     a a, b d g g, b d g g, a d fis fis, a d
     fis fis, g b e e, g' g, a'\> a, cis e <b' b,>8 <cis cis,>\!\break 
     <d a fis d>4\mf <d, a fis> <cis a e cis>8. <e cis'>16 a e cis e 
     <b' fis d b>4 <b, fis d> <a fis cis a>8. <a' cis,>16 fis cis a cis \break 
     <g' d b g>4 <g, d b g> <fis d a fis> <fis' d a fis> 
-    <g, d b g> <b' g d b> <cis, a e cis>8 <e cis a e> <a e cis a> <cis a e cis>
-    <fis d fis,>1\arpeggio\> |\!
-    r2 \ottava 1<d' d,>2\arpeggio\fermata
+    <g, d b g> <b' g d b> <cis, a e cis>8 <e cis a e> <a e cis a> <cis a e cis>  
+    \override TextSpanner.bound-details.left.text = "rit."
+    <fis d fis,>1\arpeggio\startTextSpan \> |\!
+    r2 \ottava 1<d' d,>2\arpeggio\fermata\stopTextSpan
     \bar "|."
   }
   \new Staff \relative c{\time 4/4 \key d \major \clef "bass"
     d8(\sustainOn a' d fis) a,,(\sustainOn e' a cis) 
     b,\sustainOn( fis' b d) fis,,\sustainOn( cis' fis a)
-    g,\sustainOn( d' g b) d,,( a' d fis)
+    g,\sustainOn( d' g b) d,,(_\markup \italic "simile con Pedal" a' d fis)
     g,( d' g b) a,( e' a cis)
     d,( a' d fis) a,,( e' a cis)
     b,( fis' b d) fis,,( cis' fis a)
     g,( d' g b) d,,( a' d fis)
     g,( d' g b) a,( e' a cis)
     d,( a' d a) a,( e' a e)
-    b( fis' b fis) fis,( cis' fis cis)\break
+    b( fis' b fis) fis,( cis' fis cis)
     g( d' g d) d,( a' d a)
     g( d' g d) a( e' a e)
     d( a' d a) a,( e' a e)
-    b( fis' b fis) fis,( cis' fis cis)\break
+    b( fis' b fis) fis,( cis' fis cis)
     g( d' g d) d,( a' d a)
     g( d' g d) a( e' a e)
     d( a' d a) a,( e' a e)
