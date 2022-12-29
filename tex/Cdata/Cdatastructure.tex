@@ -23,6 +23,7 @@
 
 \begin{document}
 \maketitle
+\songti
 \chapter{引论}
 \section{数学知识回顾}
 \subsection{级数}
@@ -128,7 +129,7 @@ void PrintOut( unsigned int N)
 $如果T(N) = O(f(N))且T(N) \ne \Theta (f(N))，则T(N) = o(f(N))$
 \end{Definition}
 
-这些定理的目的是为了在函数之间建立一种相对的级别：\heiti{相对增长率}(relative rate of growth)
+这些定理的目的是为了在函数之间建立一种相对的级别：{\heiti 相对增长率}(relative rate of growth)
 
 Ex: $N\ge 1000时1000 N < N^2，所以1000N = O(N^2)，n_0 = 1000, c_0 = 1$
 
@@ -372,9 +373,9 @@ int MaxSubSequenceSum (const int A[], int N){
     }
 \end{lstlisting}
 \subsubsection{运行时间中的对数}
-    除分治算法外，可将对数最常出现的规律概括为下列一般法则：\kaishu{如果一个算法用常数时间($O(1)$)将问题的大小削减为其一部分(通常是1/2)，那么该算法就是$O(\log N)$的。另一方面，如果使用常数时间只是把问题减少一个常数(如将问题减少1)，那么这种算法就是$O(N)$的。}
+    除分治算法外，可将对数最常出现的规律概括为下列一般法则：{\kaishu 如果一个算法用常数时间($O(1)$)将问题的大小削减为其一部分(通常是1/2)，那么该算法就是$O(\log N)$的。另一方面，如果使用常数时间只是把问题减少一个常数(如将问题减少1)，那么这种算法就是$O(N)$的。}
 
-    \heiti 下面提供具有对数特点的三个例子
+    {\heiti 下面提供具有对数特点的三个例子}
 \paragraph{对分查找}
 \paragraph{欧几里得算法} 计算两个数的最大公因数。
 
@@ -413,4 +414,57 @@ int MaxSubSequenceSum (const int A[], int N){
 
 \subsubsection{检验你的分析}
 
+\chapter{表，栈和队列}
+\section{抽象数据类型}
+{\kaishu 抽象数据类型(Abstract Data Type, ADT)}是一些操作的集合。例如表、集合、图以及它们的操作，它们都可以看作抽象数据类型，就像整数、实数和布尔量是数据类型一样。整数、实数及布尔𨤥有与它们相关是操作，而抽象数据类型也有与之相关的操作。对集合ADT，我们可以有{\kaishu 并(union)、交(intersection)、求大小(size)、取余(complement)}等操作。或者，我们也可以只要两种操作——{\kaishu 并和查找(find)}，这两种操作又在该集合上定义了一种{\kaishu 不同的}ADT
+\section{表 ADT}
+我们将处理如$A_1, A_2, A_3, \cdots , A_N$的普通表。这个表的大小是$N$。我们称大小为0的表为{\kaishu 空表(empty list)}
+
+对于除空表外的任何表，我们说$A_{i+1}$后继$A_i$(或继$A_i$之后)，又或者说$A_{i-1}(i < N)$前驱$A_i ( i> 1)$。我们将不定义$A_1$的前驱元，也不定义$A_N$的后继元。元素$A_i$在表中的位置为$i$。
+
+与这些“定义”相关的是我们要在表ADT上进行的操作的集合。\verb|PrintList| 和 \verb|MakeEmpty| 是常用的操作，\verb|Find| 返回关键字首次出现的位置；\verb|Insert| 和 \verb|Delete| 一般是从表的某个位置插入和删除某个关键字；\verb|FindKth| 则会返回某个位置上的元素。
+
+\subsubsection{表的简单数组实现}
+对表的所有操作都可以使用数组来实现。在C语言中，需要对表的大小的最大值进行估计。通常需要估计得大一些，而这会浪费大量的空间。这是严重的局限，特别是在存在许多知大小的表的情况下。
+
+数组实现使\verb|PrintList| 和 \verb|Find| 正如所预期的那样以线性时间执行，而\verb|FindKth| 则花费常数时间。然而，插入和删除的花费是昂贵的，最坏情况为$O(N)$
+
+因为插入和删除的运行时间非常慢并且表的大小还必须事先已知，所以简单数组一般不用来实现表这种结构。
+
+\subsection{链表}
+为了避免插入和删除的线性开销，我们允许表可以不连续存储，否则表的部分或全部需要整体移动。
+
+链表由一系列不必在内存中相连的结构组成。每一个结构均含有表元素和指向包含该元素后继元的结构的指针。我们称之为\verb|Next|指针。最后一个单元的\verb|Next|指针指向\verb|NULL|;
+
+为了执行\verb|PrintList(L)| 或\verb|Find(L, Key)|，我们只要将一个指针传递到该表的第一个元素，然后用一些\verb|Next|指针遍历该表即可。\verb|FindKth(L, i)|操作花费不如数组实现的效率高,\verb|FindKth(L, i)|操作花费$O(i)$时间以显性方式遍历链表。
+\subsection{程序设计细节}
+实际中可能有几处有问题。
+\begin{itemize}
+    \item 并不存在从所给定义出发在表的起始端插入元素的真正显性的方法。
+    \item 从表的起始端实行删除是一个特殊情况，因为它改变了表的起始端，编程中的疏忽将会造成表的丢失。
+    \item 虽然指针的移动很简单，但删除算法要求记住被删除元素{\kaishu 前面的} 表元。
+\end{itemize}
+
+事实上，稍做一个简单的变化就能解决上述三个问题。我们将留出一个标志节点，有时称之为{\kaishu 表头(header)} 或{\kaishu 哑节点(dummy node)}，这是一种惯例。我们约定，表头在位置0处。
+\subsection{双链表}
+有时候以倒序扫描链表很方便。标准实现方法此时无能为力，然而解决方法很简单。只要在数据结构上附加一个域，使它包含指向前一个单元的指针即可。它增加了空间的需求，同时也使得插入和删除的开销增加一倍。
+\subsection{循环链表}
+让最后是单元反过来直指笫一个单元是一种流行的做法。它可以有表头，也可以没有表头(若有表头，则最后的单元就指向它)，并且还可以是双向链表(笫一个单元的前驱元指针指向最后的单元)。
+\subsection{例子}
+\subsubsection{多项式ADT}
+首先，可以用表来定义一种关于一元(具有非负幂)多项式的抽象数据类型。$\displaystyle F(X) = \sum_{i=0}^{N} A_i X^i$，如果{\kaishu 大部分系数非零}，那么可以用一个简单数组来存储这些系数，然后，写一些对多项式进行加、减、乘、微分及其他操作的例程。它适合大部分项都有的稠密多项式，但如果$P_1(X) = 10 X^{1000} + 5 X^{14} +1, P_2(X) = 3X^{1990} - 2X^{1492} + 11X+5$，那么运行时间就可能不可接受了。
+
+另一种方法是使用单链表(singly linked list)。多项式的每一项含在一个单元中，并且这些单元以次数递减的顺序排序。
+\begin{lstlisting}
+typedef struct Node *PtrToNode;
+struct Node {
+    int Coefficient;
+    int Exponent;
+    PtrToNode Next;
+}
+
+typedef PtrToNode Polynomial; /* Nodes sorted by exponent */
+\end{lstlisting}
+
+唯一的困难在于，当两个多项式相乘时得到的多项式必须合并同类项。
 \end{document}
