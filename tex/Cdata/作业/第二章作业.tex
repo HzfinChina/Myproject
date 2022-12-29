@@ -60,6 +60,42 @@ suppose $T_1 (N) = O(f(N)) ,T_2 (N) = O(f(N))$ which of below eqations hold
 
 \section*{2.3}
 哪个函数增长得更快？$N \log N, N^{1+ \varepsilon / \sqrt{\log N}}(\varepsilon > 0)$
+\begin{proof}[解]
+    \begin{gather*}
+        \text{两边同时取对数 } \log N + \log \log N , (1 + \varepsilon /\sqrt {\log N})\log N\\ 
+        \text{即}\log\log N , \varepsilon \sqrt{\log N} \\
+        \varepsilon \sqrt{\log N } > \log \log N \\
+        \text{因此} N \log N< N^{1+ \varepsilon / \sqrt{\log N}}(\varepsilon > 0)
+    \end{gather*}
+\end{proof}
 
+\section*{2.4}
+证明对任意常数$k$, $\log ^ k N = o(N)$
+\begin{proof}
+\begin{gather*}
+    1. k \ge 1，略\\
+    2. k <  0, \log ^k N 递减\\
+    3. 0 \le k < 1  \lim_{N \to \infty}\frac{\log ^k N}{N} = \lim_{N \to \infty} k \frac{\log ^{k-1} N }{N\ln 2} = 0
+\end{gather*}
+\end{proof}
 
+\section*{2.5}
+定义两个函数$f(N),g(N)$，使得$f(N) \ne O(g(N)),g(N) \ne O(f(N))$
+\begin{proof}[解]
+    \begin{gather*}
+    f(N) = \begin{cases}
+        0& N为奇\\ 1 &N为偶
+    \end{cases},
+    g(N) = \begin{cases}
+        1 &N 为偶 \\ 0 & N 为奇
+    \end{cases}
+    \end{gather*}
+\end{proof}
+
+\section*{2.6}
+对6个程序片段中的每一个:
+\begin{enumerate}
+    \item 给出运行时间分析
+    \item 编程，用实际的运行时间与分析比较。
+\end{enumerate}
 \end{document}
