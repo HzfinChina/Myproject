@@ -10,3 +10,4 @@ void MakeEmpty(struct queue * ptq);
 void DisposeQueue(struct queue *ptq);
 void Enqueue(struct queue *ptq, int data);
 int Dequeue(struct queue * ptq);
+_Bool isEmpty(struct queue * ptq);

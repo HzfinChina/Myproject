@@ -9,11 +9,17 @@ struct queue * CreateQueue(int capacity){
     return retptq;
 }
 
+
 void MakeEmpty(struct queue * ptq){
     ptq->capacity = 0;
     ptq->rear = 0;
     ptq->front = 0;
     ptq->size = 0;
+}
+
+
+_Bool isEmpty(struct queue * ptq){
+    return !ptq->size;
 }
 
 void DisposeQueue(struct queue *ptq){
