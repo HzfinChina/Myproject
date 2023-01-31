@@ -467,4 +467,89 @@ typedef PtrToNode Polynomial; /* Nodes sorted by exponent */
 \end{lstlisting}
 
 唯一的困难在于，当两个多项式相乘时得到的多项式必须合并同类项。
+\section{栈 ADT}
+\subsection{栈模型}
+{\kaishu 栈}是限制插入和删除只能在一个位置上进行的表，该位置是表的末端，叫作栈的{\kaishu 顶}(top)。对栈的基本操作有\verb|Push|(进栈)和\verb|Pop|(出栈)，前者相当于插入，后者则是删除最后插入的元素。
+
+栈虽然有清空栈和判断是否空栈的操作，但是最核心的是\verb|Pop| 和\verb|Top|操作。
+\subsection{栈的实现}
+由于栈是一个表，因此任何实现表的方法都能实现栈。有两种流行的实现方法。一种方法使用指针，另一种方法则使用数组。如果使用好的编程原则，那么调用例程不必知道使用的是哪种方法。
+\subsubsection{栈的链表实现}
+栈的第一种实现方法是使用单链表。我们通过在表前端插入来实现\verb|Push|，通过删除表前端元素实现\verb|Pop|。
+\begin{lstlisting}
+#ifndef _Stack_h 
+
+struct Node;
+typedef struct Node *PtrToNode;
+typedef PtrToNode Stack;
+
+int IsEmpty(Stack S);
+Stack CreateStack(void);
+void DisposeStack(Stack S);
+void MakeEmpty(Stack S);
+void Push(ElementType X, Stack S);
+ElementType Top(Stack S);
+void Pop(Stack S);
+
+#endif /* _Stack_h */
+
+/* Place in implementation file */ 
+struct Node{
+    ElementType Element;
+    PtrToNode Next;
+};
+\end{lstlisting}
+
+\subsubsection{栈的数组实现}
+另一种实现方法避免了指针并且可能是更流行的解决方案。这种策略的唯一潜在危害是我们需要提前声明一个数组的大小。
+
+每一个栈有一个\verb|TopOfStack|，对于空栈它是-1(这就是空栈的初始化)。
+
+由于潜在地存在多个栈，因此\verb|Stack|数组和\verb|TopOfStack|只代表一个栈结构的一部分。{\heiti 使用全局变量和固定名字来表示这种(或任意)数据结构非常不好}，因为在大多数实际情况下总是存有多个栈。当编写实际程序的时候，应该尽可能严格地遵模型，这样，除了对栈ADT的操作函数之外，{\heiti 你的程序的任何部分都没有存取被每个栈包含的数组或栈顶(top of stack)变量的可能}。这对所有的ADT操作都是成立的。
+
+注意，这些操作不仅以常数时间运行，而且是以非常快的常数时间运行。在某些机器上，若在带有自增或自减寻址功能的寄存器上操作，则(整数的)\verb|Psuh|和\verb|Pop|都可以写成一条机器指令。最现代化的计算机将栈操作作为它的指令系统的一部分，这个事实表明，栈很可能是计算机科学中仅次于数组的最基本的数据结构。
+
+\subsection{应用}
+\subsubsection{配对符号}
+编译器检查程序的语法错误，但是常常由于缺少一个符号(如遗漏一个花括号或注释起始符)引起编译器列出上百行的诊断，而真示的错误并没有找出。这时可以用一个程序来检验是否每个符号都成对出现。
+
+这个简单的算法用到一个栈，叙述如下。
+
+{\kaishu \qquad 做一个空栈。读入字符直到文件尾。如果字符是一个开放符号，则将其推入栈中。如果字符是一个封闭符号，则当栈空时报错；否则，将栈元素弹出。如果弹出的符号不是对应的开放符号，则报错。在文件尾，如果栈非空则报错。}
+
+\subsubsection{计算后缀表达式}
+\begin{gather*}
+4.99*1.06 + 5.99 + 6.99*1.06\\
+\downarrow\\
+4.99\ 1.06\ *\ 5.99\ +\ 6.99\ +1.06\ *\ +
+\end{gather*}
+\subsubsection{中缀到后缀的转换}
+当读到一个操作数的时候，立即把它放到输出中。操作符不立即输出，所以必须先存到某个地方。正确的做法是将已经见到过的操作符放进栈中而不是放到输出中。
+
+如果见到一个右括号，那么就将栈元素弹出，将弹出的符号写出直到遇到一个对应的左括号，但是这个左括号只被弹出，并不输出(因为后缀表达式没有括号)
+
+如果见到任何其他的符号("+", "*", "(")，那么从栈中弹出栈元素直到发现优先级更低的元表为止。
+
+最后，如果读到输入的末尾，将栈元表弹出直到该栈变成空栈。将符号写到输出中。
+\subsubsection{函数调用}
+当存在函数调用时，需要存储的所有重要信息，诸如寄存器的值(存储函数内部变量)和返回地址等，都要存放在“一张纸上”，并被置于一个堆(pile)的顶部，然后控制转移到新函数，该函数自由地用它的一些值代替这些寄存器。当该函数返回时，它查看堆顶部的那张“纸”并复原所有的寄存器，然后它进行返回转移。
+
+这些工作均可由一个栈来完成，实现递归的每一种程序设计语言也正是这样做的。所存储的信息或称为{\kaishu 活动记录}(activation record)，或叫作{\kaishu 栈帧}(stack frame)。在实际计算机中的栈常常是从内存分区的高端向下增长，显然，用尽栈空间通常是致命的错误。
+
+在正常情况下不应该越出栈空间，发生这种情况通常是由失控({\heiti 忘记基准情形}引起的。有些时候，某些完全合法并且表面上无害的程序也可以使你越出栈空间。
+\begin{lstlisting}
+#define MAX 300000
+void PrintList(int *array, int index){ //index is 0 at the beginning
+    if (index != MAX){
+        printf("%d", index);
+        PrintList(array, int index);
+    }
+}
+\end{lstlisting}
+上面的程序根据我的测试，在递归次数为20多万就会发生\verb|segmentation fault|
+\section{队列 ADT}
+\subsubsection{队列模型}
+队列模型的基本操作是\verb|Enqueue|(入队)——在表的末端(叫作队尾(rear))插入一个元素，还有\verb|Dequeue|(出队)——它是删除在表的开头(叫作队头(front))的元表。概括起来就是：{\kaishu 先进先出}。
+\subsubsection{队列的数组实现}
+链表实现是很简单的，数组实现需要用到{\kaishu 循环数组}(circular array)。
 \end{document}
