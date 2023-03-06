@@ -1,4 +1,5 @@
 \documentclass[utf8]{ctexbook}
+\usepackage{xeCJK}
 \xeCJKsetup{CJKmath=true}
 \usepackage{geometry}
 \geometry{a4paper,left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm}
@@ -552,4 +553,10 @@ void PrintList(int *array, int index){ //index is 0 at the beginning
 队列模型的基本操作是\verb|Enqueue|(入队)——在表的末端(叫作队尾(rear))插入一个元素，还有\verb|Dequeue|(出队)——它是删除在表的开头(叫作队头(front))的元表。概括起来就是：{\kaishu 先进先出}。
 \subsubsection{队列的数组实现}
 链表实现是很简单的，数组实现需要用到{\kaishu 循环数组}(circular array)。
+
+\chapter{树}
+树的特点：大部分操作的运行时间平均为$O(\log N)$
+\section{预备知识}
+
 \end{document}
+
